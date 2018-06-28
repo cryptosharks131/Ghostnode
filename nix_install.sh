@@ -1,38 +1,20 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
-CONFIG_FILE='aced.conf'
-CONFIGFOLDER='/root/.acedcore'
-COIN_DAEMON='/usr/local/bin/acedd'
-COIN_CLI='/usr/local/bin/aced-cli'
-COIN_REPO='https://github.com/Acedcoin/AceD/releases/download/1.5/ubuntu16mn.tar.gz'
-#SENTINEL_REPO='https://github.com/cryptosharks131/sentinel'
-COIN_NAME='AceD'
-COIN_PORT=24126
+CONFIG_FILE='nix.conf'
+CONFIGFOLDER='/root/.nix'
+COIN_DAEMON='/usr/local/bin/nixd'
+COIN_CLI='/usr/local/bin/nix-cli'
+COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v1.0.0/nix_core_ubuntu_1_0_0.zip'
+COIN_NAME='NIX'
+COIN_PORT=6214
 #COIN_BS='http://bootstrap.zip'
 
-
 NODEIP=$(curl -s4 icanhazip.com)
-
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
-
-
-function install_sentinel() {
-  echo -e "${GREEN}Install sentinel.${NC}"
-  apt-get -y install python-virtualenv virtualenv >/dev/null 2>&1
-  git clone $SENTINEL_REPO /sentinel >/dev/null 2>&1
-  cd /sentinel
-  virtualenv ./venv >/dev/null 2>&1
-  ./venv/bin/pip install -r requirements.txt >/dev/null 2>&1
-  echo  "* * * * * cd /sentinel && ./venv/bin/python bin/sentinel.py >> $CONFIGFOLDER/sentinel.log 2>&1" > $CONFIGFOLDER/$COIN_NAME.cron
-  crontab $CONFIGFOLDER/$COIN_NAME.cron
-  rm $CONFIGFOLDER/$COIN_NAME.cron >/dev/null 2>&1
-  cd -
-}
-
 
 function compile_node() {
   echo -e "Prepare to download $COIN_NAME"
@@ -40,15 +22,15 @@ function compile_node() {
   wget -q $COIN_REPO
   compile_error
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
-  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
+  unzip $COIN_ZIP >/dev/null 2>&1
   compile_error
-  cp aced{d,-cli} /usr/local/bin
+  cp nix{d,-cli} /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
   rm -rf $TMP_FOLDER >/dev/null 2>&1
-  chmod +x /usr/local/bin/acedd
-  chmod +x /usr/local/bin/aced-cli
+  chmod +x /usr/local/bin/nixd
+  chmod +x /usr/local/bin/nix-cli
   clear
 }
 
@@ -110,7 +92,7 @@ EOF
 }
 
 function create_key() {
-  echo -e "Enter your ${RED}$COIN_NAME Masternode Private Key${NC}. Leave it blank to generate a new ${RED}Masternode Private Key${NC} for you:"
+  echo -e "Enter your ${RED}$COIN_NAME Ghostnode Private Key${NC}. Leave it blank to generate a new ${RED}Ghostnode Private Key${NC} for you:"
   read -e COINKEY
   if [[ -z "$COINKEY" ]]; then
   $COIN_DAEMON -daemon
@@ -119,12 +101,12 @@ function create_key() {
    echo -e "${RED}$COIN_NAME server couldn not start. Check /var/log/syslog for errors.{$NC}"
    exit 1
   fi
-  COINKEY=$($COIN_CLI masternode genkey)
+  COINKEY=$($COIN_CLI ghostnode genkey)
   if [ "$?" -gt "0" ];
     then
     echo -e "${RED}Wallet not fully loaded. Let us wait and try again to generate the Private Key${NC}"
     sleep 30
-    COINKEY=$($COIN_CLI masternode genkey)
+    COINKEY=$($COIN_CLI ghostnode genkey)
   fi
   $COIN_CLI stop
 fi
@@ -134,13 +116,12 @@ clear
 function update_config() {
   sed -i 's/daemon=1/daemon=0/' $CONFIGFOLDER/$CONFIG_FILE
   cat << EOF >> $CONFIGFOLDER/$CONFIG_FILE
-logintimestamps=1
-maxconnections=256
-#bind=$NODEIP
-masternode=1
-externalip=$NODEIP:$COIN_PORT
-masternodeprivkey=$COINKEY
-EOF
+  logintimestamps=1
+  maxconnections=256
+  ghostnode=1
+  externalip=$NODEIP:$COIN_PORT
+  ghostnodeprivkey=$COINKEY
+  EOF
 }
 
 
@@ -180,72 +161,71 @@ function get_ip() {
 
 
 function compile_error() {
-if [ "$?" -gt "0" ];
- then
-  echo -e "${RED}Failed to compile $COIN_NAME. Please investigate.${NC}"
-  exit 1
-fi
+  if [ "$?" -gt "0" ];
+   then
+    echo -e "${RED}Failed to compile $COIN_NAME. Please investigate.${NC}"
+    exit 1
+  fi
 }
 
 
 function checks() {
-if [[ $(lsb_release -d) != *16.04* ]]; then
-  echo -e "${RED}You are not running Ubuntu 16.04. Installation is cancelled.${NC}"
-  exit 1
-fi
+  if [[ $(lsb_release -d) != *16.04* ]]; then
+    echo -e "${RED}You are not running Ubuntu 16.04. Installation is cancelled.${NC}"
+    exit 1
+  fi
 
-if [[ $EUID -ne 0 ]]; then
-   echo -e "${RED}$0 must be run as root.${NC}"
-   exit 1
-fi
+  if [[ $EUID -ne 0 ]]; then
+     echo -e "${RED}$0 must be run as root.${NC}"
+     exit 1
+  fi
 
-if [ -n "$(pidof $COIN_DAEMON)" ] || [ -e "$COIN_DAEMOM" ] ; then
-  echo -e "${RED}$COIN_NAME is already installed.${NC}"
-  exit 1
-fi
+  if [ -n "$(pidof $COIN_DAEMON)" ] || [ -e "$COIN_DAEMOM" ] ; then
+    echo -e "${RED}$COIN_NAME is already installed.${NC}"
+    exit 1
+  fi
 }
 
 function prepare_system() {
-echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} master node."
-echo -e "This might take 15-20 minutes and the screen will not move, so please be patient."
-apt-get update >/dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get update > /dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade >/dev/null 2>&1
-apt install -y software-properties-common >/dev/null 2>&1
-echo -e "${GREEN}Adding bitcoin PPA repository"
-apt-add-repository -y ppa:bitcoin/bitcoin >/dev/null 2>&1
-echo -e "Installing required packages, it may take some time to finish.${NC}"
-apt-get update >/dev/null 2>&1
-apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" make software-properties-common \
-build-essential libtool autoconf libssl-dev libboost-dev libboost-chrono-dev libboost-filesystem-dev libboost-program-options-dev \
-libboost-system-dev libboost-test-dev libboost-thread-dev sudo automake git wget curl libdb4.8-dev bsdmainutils libdb4.8++-dev \
-libminiupnpc-dev libgmp3-dev unzip libzmq3-dev ufw pkg-config libevent-dev libdb5.3++>/dev/null 2>&1
-if [ "$?" -gt "0" ];
-  then
-    echo -e "${RED}Not all required packages were installed properly. Try to install them manually by running the following commands:${NC}\n"
-    echo "apt-get update"
-    echo "apt -y install software-properties-common"
-    echo "apt-add-repository -y ppa:bitcoin/bitcoin"
-    echo "apt-get update"
-    echo "apt install -y make build-essential libtool software-properties-common autoconf libssl-dev libboost-dev libboost-chrono-dev libboost-filesystem-dev \
-libboost-program-options-dev libboost-system-dev libboost-test-dev libboost-thread-dev sudo automake git curl libdb4.8-dev \
-bsdmainutils libdb4.8++-dev libminiupnpc-dev libgmp3-dev ufw fail2ban pkg-config libevent-dev"
- exit 1
-fi
-
-clear
+  echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} master node."
+  echo -e "This might take 15-20 minutes and the screen will not move, so please be patient."
+  apt-get update >/dev/null 2>&1
+  DEBIAN_FRONTEND=noninteractive apt-get update > /dev/null 2>&1
+  DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade >/dev/null 2>&1
+  apt install -y software-properties-common >/dev/null 2>&1
+  echo -e "${GREEN}Adding bitcoin PPA repository"
+  apt-add-repository -y ppa:bitcoin/bitcoin >/dev/null 2>&1
+  echo -e "Installing required packages, it may take some time to finish.${NC}"
+  apt-get update >/dev/null 2>&1
+  apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" make software-properties-common \
+  build-essential libtool autoconf libssl-dev libboost-dev libboost-chrono-dev libboost-filesystem-dev libboost-program-options-dev \
+  libboost-system-dev libboost-test-dev libboost-thread-dev sudo automake git wget curl libdb4.8-dev bsdmainutils libdb4.8++-dev \
+  libminiupnpc-dev libgmp3-dev unzip libzmq3-dev ufw pkg-config libevent-dev libdb5.3++>/dev/null 2>&1
+  if [ "$?" -gt "0" ];
+    then
+      echo -e "${RED}Not all required packages were installed properly. Try to install them manually by running the following commands:${NC}\n"
+      echo "apt-get update"
+      echo "apt -y install software-properties-common"
+      echo "apt-add-repository -y ppa:bitcoin/bitcoin"
+      echo "apt-get update"
+      echo "apt install -y make build-essential libtool software-properties-common autoconf libssl-dev libboost-dev libboost-chrono-dev libboost-filesystem-dev \
+  libboost-program-options-dev libboost-system-dev libboost-test-dev libboost-thread-dev sudo automake git curl libdb4.8-dev \
+  bsdmainutils libdb4.8++-dev libminiupnpc-dev libgmp3-dev ufw fail2ban pkg-config libevent-dev"
+   exit 1
+  fi
+  clear
 }
 
 
 function important_information() {
  echo
  echo -e "================================================================================================================================"
- echo -e "$COIN_NAME Masternode is up and running listening on port ${RED}$COIN_PORT${NC}."
+ echo -e "$COIN_NAME Ghostnode is up and running listening on port ${RED}$COIN_PORT${NC}."
  echo -e "Configuration file is: ${RED}$CONFIGFOLDER/$CONFIG_FILE${NC}"
  echo -e "Start: ${RED}systemctl start $COIN_NAME.service${NC}"
  echo -e "Stop: ${RED}systemctl stop $COIN_NAME.service${NC}"
  echo -e "VPS_IP:PORT ${RED}$NODEIP:$COIN_PORT${NC}"
- echo -e "MASTERNODE PRIVATEKEY is: ${RED}$COINKEY${NC}"
+ echo -e "GHOSTNODE PRIVATEKEY is: ${RED}$COINKEY${NC}"
  if [[ -n $SENTINEL_REPO  ]]; then
   echo -e "${RED}Sentinel${NC} is installed in ${RED}/sentinel${NC}"
   echo -e "Sentinel logs is: ${RED}$CONFIGFOLDER/sentinel.log${NC}"
@@ -260,9 +240,9 @@ function import_bootstrap() {
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
   unzip $COIN_ZIP >/dev/null 2>&1
   compile_error
-  cp -r ~/bootstrap/blocks ~/.acedcore/blocks
-  cp -r ~/bootstrap/chainstate ~/.acedcore/chainstate
-  cp -r ~/bootstrap/peers.dat ~/.acedcore/peers.dat
+  cp -r ~/bootstrap/blocks ~/.nix/blocks
+  cp -r ~/bootstrap/chainstate ~/.nix/chainstate
+  cp -r ~/bootstrap/peers.dat ~/.nix/peers.dat
   rm -r ~/bootstrap/
   rm $COIN_ZIP
 }
@@ -274,11 +254,9 @@ function setup_node() {
   create_key
   update_config
   enable_firewall
-  #install_sentinel
   important_information
   configure_systemd
 }
-
 
 ##### Main #####
 clear
