@@ -1,40 +1,32 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
-COIN_DAEMON='/usr/local/bin/acedd'
-COIN_CLI='/usr/local/bin/aced-cli'
-COIN_REPO='https://github.com/Acedcoin/AceD/releases/download/1.5/ubuntu16mn.tar.gz'
-#SENTINEL_REPO='https://github.com/cryptosharks131/sentinel'
-COIN_NAME='AceD'
+COIN_DAEMON='/usr/local/bin/nixd'
+COIN_CLI='/usr/local/bin/nix-cli'
+COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v1.0.0/nix_core_ubuntu_1_0_0.zip'
+COIN_NAME='NIX'
 #COIN_BS='http://bootstrap.zip'
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-function update_sentinel() {
-  echo -e "${GREEN}Updating sentinel.${NC}"
-  cd /sentinel
-  git pull
-  cd -
-}
-
 function update_node() {
   echo -e "Preparing to download updated $COIN_NAME"
-  rm /usr/local/bin/aced*
+  rm /usr/local/bin/nix*
   cd $TMP_FOLDER
   wget -q $COIN_REPO
   compile_error
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
-  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
+  unzip $COIN_ZIP >/dev/null 2>&1
   compile_error
-  cp aced{d,-cli} /usr/local/bin
+  cp nix{d,-cli} /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
   rm -rf $TMP_FOLDER >/dev/null 2>&1
-  chmod +x /usr/local/bin/acedd
-  chmod +x /usr/local/bin/aced-cli
+  chmod +x /usr/local/bin/nixd
+  chmod +x /usr/local/bin/nix-cli
   clear
 }
 
@@ -80,20 +72,20 @@ bsdmainutils libdb4.8++-dev libminiupnpc-dev libgmp3-dev libzmq3-dev ufw fail2ba
 fi
 systemctl stop $COIN_NAME.service
 sleep 3
-pkill -9 acedd
+pkill -9 nixd
 clear
 }
 
 function import_bootstrap() {
-  rm -r ~/.acedcore/blocks ~/.acedcore/chainstate ~/.acedcore/peers.dat
+  rm -r ~/.nix/blocks ~/.nix/chainstate ~/.nix/peers.dat
   wget -q $COIN_BS
   compile_error
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
   unzip $COIN_ZIP >/dev/null 2>&1
   compile_error
-  cp -r ~/bootstrap/blocks ~/.acedcore/blocks
-  cp -r ~/bootstrap/chainstate ~/.acedcore/chainstate
-  cp -r ~/bootstrap/peers.dat ~/.acedcore/peers.dat
+  cp -r ~/bootstrap/blocks ~/.nix/blocks
+  cp -r ~/bootstrap/chainstate ~/.nix/chainstate
+  cp -r ~/bootstrap/peers.dat ~/.nix/peers.dat
   rm -r ~/bootstrap/
   rm $COIN_ZIP
   echo -e "Sync is complete"
@@ -103,7 +95,7 @@ function important_information() {
  systemctl start $COIN_NAME.service
  echo
  echo -e "================================================================================================================================"
- echo -e "$COIN_NAME Masternode is updated and running again!"
+ echo -e "$COIN_NAME Ghostnode is updated and running again!"
  echo -e "Start: ${RED}systemctl start $COIN_NAME.service${NC}"
  echo -e "Stop: ${RED}systemctl stop $COIN_NAME.service${NC}"
  echo -e "Please check ${RED}$COIN_NAME${NC} is running with the following command: ${RED}systemctl status $COIN_NAME.service${NC}"
@@ -117,5 +109,4 @@ checks
 prepare_system
 update_node
 #import_bootstrap
-#update_sentinel
 important_information
