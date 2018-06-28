@@ -7,6 +7,7 @@ COIN_DAEMON='/usr/local/bin/nixd'
 COIN_CLI='/usr/local/bin/nix-cli'
 COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v1.0.0/nix_core_ubuntu_1_0_0.zip'
 COIN_NAME='NIX'
+COIN_RPC=8332
 COIN_PORT=6214
 #COIN_BS='http://bootstrap.zip'
 
@@ -84,6 +85,7 @@ function create_config() {
 rpcuser=$RPCUSER
 rpcpassword=$RPCPASSWORD
 rpcallowip=127.0.0.1
+rpcport=$COIN_RPC
 listen=1
 server=1
 daemon=1
