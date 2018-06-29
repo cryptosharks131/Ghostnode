@@ -23,7 +23,7 @@ function compile_node() {
   wget -q $COIN_REPO
   compile_error
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
-  unzip $COIN_ZIP >/dev/null 2>&1
+  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
   cp nix{d,-cli} /usr/local/bin
   compile_error
