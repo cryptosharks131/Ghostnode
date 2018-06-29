@@ -118,14 +118,14 @@ clear
 function update_config() {
   sed -i 's/daemon=1/daemon=0/' $CONFIGFOLDER/$CONFIG_FILE
   cat << EOF >> $CONFIGFOLDER/$CONFIG_FILE
-  logintimestamps=1
-  maxconnections=256
-  ghostnode=1
-  externalip=$NODEIP:$COIN_PORT
-  ghostnodeprivkey=$COINKEY
-  EOF
+logintimestamps=1
+maxconnections=256
+#bind=$NODEIP
+ghostnode=1
+externalip=$NODEIP:$COIN_PORT
+ghostnodeprivkey=$COINKEY
+EOF
 }
-
 
 function enable_firewall() {
   echo -e "Installing and setting up firewall to allow ingress on port ${GREEN}$COIN_PORT${NC}"
