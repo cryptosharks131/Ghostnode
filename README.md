@@ -13,12 +13,12 @@ bash nix_install.sh
 
 ## Desktop wallet setup
 
-After the GN is up and running, you need to configure the desktop wallet accordingly. Here are the steps for Windows Wallet
+After the GN is up and running, you need to configure the desktop wallet accordingly. Here are the steps for Windows/Mac Wallet:
 1. Open the NIX Core Wallet.
 2. Go to RECEIVE and create a New Address: **GN1**
 3. Send **40000** **NIX** to **GN1**.
 4. Wait for 15 confirmations before starting the node.
-5. Go to **Tools -> "Debug console - Console"**
+5. Go to **Help -> "Debug window - Console"**
 6. Type the following command: **ghostnode outputs**
 7. Open ghostnode.conf from the following folder %appdata%\nix (windows) or ~/Library/Application Support/ (hidden folder for Mac users)
 8. Add the following entry:
@@ -39,9 +39,9 @@ Alias Address Privkey TxHash Output_index
 
 ## Usage:
 ```
-nix-cli getinfo
+nix-cli getblockchaininfo
+nix-cli getnetworkinfo
 nix-cli ghostnode status
-nix-cli mnsync status
 ```
 Also, if you want to check/start/stop **NIX** , run one of the following commands as **root**:
 ```
