@@ -189,7 +189,7 @@ function checks() {
 }
 
 function prepare_system() {
-  echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} master node."
+  echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} ghostnode."
   echo -e "This might take 15-20 minutes and the screen will not move, so please be patient."
   apt-get update >/dev/null 2>&1
   DEBIAN_FRONTEND=noninteractive apt-get update > /dev/null 2>&1
