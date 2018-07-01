@@ -15,7 +15,7 @@ bash nix_install.sh
 
 After the GN is up and running, you need to configure the desktop wallet accordingly. Here are the steps for Windows/Mac Wallet:
 1. Open the NIX Core Wallet.
-2. Go to RECEIVE and create a New Address: **GN1**
+2. Go to RECEIVE and create a New 'G' Address: **GN1**
 3. Send **40000** **NIX** to **GN1**.
 4. Wait for 15 confirmations before starting the node.
 5. Go to **Help -> "Debug window - Console"**
