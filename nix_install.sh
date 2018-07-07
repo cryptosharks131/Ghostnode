@@ -94,7 +94,7 @@ EOF
 }
 
 function create_key() {
-  echo -e "Enter your ${RED}$COIN_NAME Ghostnode Private Key${NC}. Leave it blank to generate a new ${RED}Ghostnode Private Key${NC} for you:"
+  echo -e "Enter your ${RED}$COIN_NAME Ghostnode GenKey${NC}. Leave it blank to generate a new ${RED}Ghostnode GenKey${NC} for you:"
   read -e COINKEY
   if [[ -z "$COINKEY" ]]; then
   $COIN_DAEMON -daemon
@@ -106,7 +106,7 @@ function create_key() {
   COINKEY=$($COIN_CLI ghostnode genkey)
   if [ "$?" -gt "0" ];
     then
-    echo -e "${RED}Wallet not fully loaded. Let us wait and try again to generate the Private Key${NC}"
+    echo -e "${RED}Wallet not fully loaded. Let us wait and try again to generate the GenKey${NC}"
     sleep 30
     COINKEY=$($COIN_CLI ghostnode genkey)
   fi
@@ -227,7 +227,7 @@ function important_information() {
  echo -e "Start: ${RED}systemctl start $COIN_NAME.service${NC}"
  echo -e "Stop: ${RED}systemctl stop $COIN_NAME.service${NC}"
  echo -e "VPS_IP:PORT ${RED}$NODEIP:$COIN_PORT${NC}"
- echo -e "GHOSTNODE PRIVATEKEY is: ${RED}$COINKEY${NC}"
+ echo -e "GHOSTNODE GENKEY is: ${RED}$COINKEY${NC}"
  if [[ -n $SENTINEL_REPO  ]]; then
   echo -e "${RED}Sentinel${NC} is installed in ${RED}/sentinel${NC}"
   echo -e "Sentinel logs is: ${RED}$CONFIGFOLDER/sentinel.log${NC}"
