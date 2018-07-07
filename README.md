@@ -1,7 +1,7 @@
 # NIX
 Shell script to install a [NIX Ghostnode](http://www.nixplatform.io/) on a Linux server running Ubuntu 16.04.  
 This will require a VPS, I use [Vultr](https://www.vultr.com/?ref=7310394).  I recommend using a $5 server.
-This script will install **NIX Core 1.0.1**.
+This script will install **NIX Core 1.0.2**.
 ***
 
 ## Installation:
@@ -23,11 +23,11 @@ After the GN is up and running, you need to configure the desktop wallet accordi
 7. Open ghostnode.conf from the following folder %appdata%\nix (windows) or ~/Library/Application Support/ (hidden folder for Mac users)
 8. Add the following entry:
 ```
-Alias Address Privkey TxHash Output_index
+Alias Address Genkey TxHash Output_index
 ```
 * Alias: **GN1**
 * Address: **VPS_IP:6214**
-* Privkey: **Ghostnode Private Key**
+* Genkey: **Ghostnode GenKey**
 * TxHash: **First value from Step 6** 
 * Output index:  **Second value from Step 6** It can be **0** or **1**
 9. Click OK and exit the Wallet.
