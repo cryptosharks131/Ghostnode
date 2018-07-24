@@ -5,6 +5,7 @@ This script will install **NIX Core 1.0.2**.
 ***
 
 ## Installation:
+Log into the server using ssh (Putty for windows or terminal for Mac users) and run the following commands:
 ```
 wget -q https://raw.githubusercontent.com/cryptosharks131/Ghostnode/master/nix_install.sh
 bash nix_install.sh
