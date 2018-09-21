@@ -92,6 +92,7 @@ function import_bootstrap() {
 }
 
 function important_information() {
+ rm -r ~/.nix/blocks/ ~/.nix/chainstate/ ~/.nix/peers.dat ~/.nix/banlist.dat 
  systemctl start $COIN_NAME.service
  echo
  echo -e "================================================================================================================================"
