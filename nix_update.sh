@@ -3,7 +3,7 @@
 TMP_FOLDER=$(mktemp -d)
 COIN_DAEMON='/usr/local/bin/nixd'
 COIN_CLI='/usr/local/bin/nix-cli'
-COIN_REPO='https://github.com/cryptosharks131/Ghostnode/releases/download/2.0.2/Nix.tar.gz'
+COIN_REPO='https://github.com/cryptosharks131/Ghostnode/releases/download/v2.0.3/Nix.tar.gz'
 COIN_NAME='NIX'
 #COIN_BS='http://bootstrap.zip'
 
