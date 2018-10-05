@@ -5,7 +5,7 @@ CONFIG_FILE='nix.conf'
 CONFIGFOLDER='/root/.nix'
 COIN_DAEMON='/usr/local/bin/nixd'
 COIN_CLI='/usr/local/bin/nix-cli'
-COIN_REPO='https://github.com/cryptosharks131/Ghostnode/releases/download/v2.0.3/Nix.tar.gz'
+COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v2.0.3/nix-2.0.3-x86_64-linux-gnu.tar.gz'
 COIN_NAME='NIX'
 COIN_RPC=8332
 COIN_PORT=6214
@@ -25,7 +25,7 @@ function compile_node() {
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
   tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
-  cp nix{d,-cli} /usr/local/bin
+  cp bin/nix{d,-cli} /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
