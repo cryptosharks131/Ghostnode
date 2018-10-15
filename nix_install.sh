@@ -7,7 +7,7 @@ COIN_DAEMON='/usr/local/bin/nixd'
 COIN_CLI='/usr/local/bin/nix-cli'
 COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v2.0.3/nix-2.0.3-x86_64-linux-gnu.tar.gz'
 COIN_NAME='NIX'
-COIN_RPC=8332
+COIN_RPC=6215
 COIN_PORT=6214
 #COIN_BS='http://bootstrap.zip'
 
