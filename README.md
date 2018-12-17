@@ -72,9 +72,9 @@ nix-cli encryptwallet "create_password_here"
 nix-cli getnewaddress
 nix-cli walletpassphrase "put_your_password_here" 0 true
 ```
-Now you may go to your local wallet and create a LPoS contract with the following details.
-Lease To: This is the address you got from the VPS after running 'nix-cli getnewaddress'
-Amount: The amount to place in the contract (subtract fee button can be used to take the contract writing fee from this amount)
+Now you may go to your local wallet and create a LPoS contract with the following details.  
+Lease To: This is the address you got from the VPS after running 'nix-cli getnewaddress'  
+Amount: The amount to place in the contract (subtract fee button can be used to take the contract writing fee from this amount)  
 
 You can now hit 'send nix' to confirm the contract and you are all set!  Once the contract gets 200 confirms, your VPS will start staking!
 ***
