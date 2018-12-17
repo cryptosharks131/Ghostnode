@@ -94,7 +94,6 @@ EOF
 }
 
 function update_config() {
-  sed -i 's/daemon=1/daemon=0/' $CONFIGFOLDER/$CONFIG_FILE
   cat << EOF >> $CONFIGFOLDER/$CONFIG_FILE
 maxconnections=24
 staking=1
