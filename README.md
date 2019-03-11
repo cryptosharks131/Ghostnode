@@ -1,7 +1,7 @@
 # NIX
 Shell script to install a [NIX Ghostnode](http://www.nixplatform.io/) on a Linux server running Ubuntu 16.04.  
 This will require a VPS, I use [Vultr](https://www.vultr.com/?ref=7310394).  I recommend using a $5 server.
-This script will install **NIX Core 2.3.0**.
+This script will install **NIX Core 2.3.0.1**.
 ***
 
 ## Installation:
