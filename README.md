@@ -1,13 +1,12 @@
 # NIX
-Shell script to install a [NIX Ghostnode](http://www.nixplatform.io/) on a Linux server running Ubuntu 16.04.  
-This will require a VPS, I use [Vultr](https://www.vultr.com/?ref=7310394).  I recommend using a $5 server.
-This script will install **NIX Core 2.3.0.1**.
+Shell script to install a [NIX Ghostnode](http://www.nixplatform.io/) on a Linux server running Ubuntu 16.04/18.04.  
+This script will install **NIX Core 2.3.0.2**.
 ***
 
 ## Installation:
 Log into the server using ssh (Putty for windows or terminal for Mac users) and run the following commands:
 ```
-wget -q https://raw.githubusercontent.com/cryptosharks131/Ghostnode/master/nix_install.sh
+wget -q https://raw.githubusercontent.com/dacx/Ghostnode/master/nix_install.sh
 bash nix_install.sh
 ```
 ***
@@ -57,7 +56,7 @@ systemctl is-enabled NIX #To check whetether NIX service is enabled on boot or n
 The first line (rm nix_update.sh) is not required the very first time you update the node and will return an error if you run it.  This is fine, continue with the update script.
 ```
 rm nix_update.sh*
-wget -q https://raw.githubusercontent.com/cryptosharks131/Ghostnode/master/nix_update.sh
+wget -q https://raw.githubusercontent.com/dacx/Ghostnode/master/nix_update.sh
 bash nix_update.sh
 ```
 ***
@@ -66,7 +65,7 @@ bash nix_update.sh
 These instructions will help guide you to setting up your own cold stake on a VPS.
 Log into the server using ssh (Putty for windows or terminal for Mac users) and run the following commands:
 ```
-wget -q https://raw.githubusercontent.com/cryptosharks131/Ghostnode/master/nix_cold_stake.sh
+wget -q https://raw.githubusercontent.com/dacx/Ghostnode/master/nix_cold_stake.sh
 bash nix_cold_stake.sh
 nix-cli encryptwallet "create_password_here"
 nix-cli getnewaddress
@@ -78,10 +77,3 @@ Amount: The amount to place in the contract (subtract fee button can be used to 
 
 You can now hit 'send nix' to confirm the contract and you are all set!  Once the contract gets 200 confirms, your VPS will start staking!
 ***
-
-## Donations:  
-
-**NIX**: NMuG1vCmuwh7hg8Dcd28ovVnyj5n4arbWr  
-**BTC**: 1FJvtLBszQgY2eKBawov48RwSYy2yqEvn1  
-**ETH**: 0x39acE9917e25E2A04643d30319cF34449A72441B  
-**LTC**: LR1Mmchr6Zz1vj51xecTiEdS1WHfJTVg5t
