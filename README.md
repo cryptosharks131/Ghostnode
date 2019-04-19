@@ -1,6 +1,6 @@
 # NIX
 Shell script to install a [NIX Ghostnode](http://www.nixplatform.io/) on a Linux server running Ubuntu 16.04/18.04.  
-This script will install **NIX Core 2.3.0.2**.
+This script will install **NIX Core 2.3.0.3**.
 ***
 
 ## Installation:
