@@ -9,7 +9,7 @@ COIN_REPO='https://github.com/NixPlatform/NixCore/releases/download/v2.3.1.0/nix
 COIN_NAME='NIX'
 COIN_RPC=6215
 COIN_PORT=6214
-#COIN_BS='http://bootstrap.zip'
+#COIN_BS=''
 
 NODEIP=$(curl -s4 icanhazip.com)
 
