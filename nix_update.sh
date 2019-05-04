@@ -13,10 +13,10 @@ NC='\033[0m'
 
 function update_node() {
   echo -e "Preparing to download updated $COIN_NAME"
-  rm /usr/local/bin/nix*
   cd $TMP_FOLDER
   wget -q $COIN_REPO
   compile_error
+  rm /usr/local/bin/nix*
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
   tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
