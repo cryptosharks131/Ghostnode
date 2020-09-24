@@ -82,6 +82,3 @@ You can now hit 'send nix' to confirm the contract and you are all set!  Once th
 ## Donations:  
 
 **NIX**: NMuG1vCmuwh7hg8Dcd28ovVnyj5n4arbWr  
-**BTC**: 1FJvtLBszQgY2eKBawov48RwSYy2yqEvn1  
-**ETH**: 0x39acE9917e25E2A04643d30319cF34449A72441B  
-**LTC**: LR1Mmchr6Zz1vj51xecTiEdS1WHfJTVg5t
