@@ -78,7 +78,3 @@ Amount: The amount to place in the contract (subtract fee button can be used to 
 
 You can now hit 'send nix' to confirm the contract and you are all set!  Once the contract gets 200 confirms, your VPS will start staking!
 ***
-
-## Tip Jar:  
-
-**NIX**: NMuG1vCmuwh7hg8Dcd28ovVnyj5n4arbWr  
